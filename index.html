@@ -159,7 +159,7 @@ var margin = {top: 20, right: 20, bottom: 20, left: 20};
 width = 400 - margin.left - margin.right;
 height = width - margin.top - margin.bottom;
 
-var chart = d3.select("body")
+var chart = d3.select("canvas")
 .append('svg')
 .attr("width", width + margin.left + margin.right)
 .attr("height", height + margin.top + margin.bottom)
@@ -201,119 +201,5 @@ return function(t) { return arc(i(t)); };
 
 }
 
-function startTipPct1() {
-  var margin = {top: 20, right: 20, bottom: 20, left: 20};
-  width = 400 - margin.left - margin.right;
-  height = width - margin.top - margin.bottom;
-  radius = Math.min(width, height) / 2;
-
-  var data = [ {tippct: "No tips", pct: 47.7},
-                 {tippct: "<10%", pct: 4.8},
-		 {tippct: "10~20%", pct:  22.5},
-		 {tippct: "20~30%", pct:  22.4},
-		 {tippct: ">30%", pct:  2.6} ];
-    
-  data.forEach(function(d) {
-    d.pct = +d.pct;
-  });
-    
-  var color = d3.scale.ordinal()
-  .range(["#FFF1E5", "#FFD7B2", "#FFBC7F", "#FFA24C", "#FF8719"]);
-
-  var arc = d3.svg.arc()
-  .outerRadius(radius - 20)
-  .innerRadius(radius - 70);
-
-  var pie = d3.layout.pie()
-  .sort(null)
-  .startAngle(1.1*Math.PI)
-  .endAngle(3.1*Math.PI)
-  .value(function(d) { return d.pct; });
-
-  var svg = d3.select("body").append("svg")
-  .attr("width", width)
-  .attr("height", height)
-  .append("g")
-.attr("transform", "translate(" + ((width/2)+margin.left) + "," + ((height/2)+margin.top) + ")");
-
-var g = svg.selectAll(".arc")
-.data(pie(data))
-.enter().append("g")
-.attr("class", "arc");
-
-g.append("path")
-.attr("d", arc)
-.style("fill", function(d) { return color(d.data.tippct); })
-.transition()
-.ease("linear").duration(1000)
-.attrTween('d', function(d) {
-var i = d3.interpolate({startAngle: 1.1*Math.PI, endAngle: 3.1*Math.PI}, d);
-return function(t) {
-return arc(i(t));
-    }});
-}
-
-
-var lorenzInterval;
-function startLorenz() {
-  var δτ = 0.003,
-      ρ = 28,
-      σ = 10,
-      β = 8 / 3,
-      x = .5,
-      y = .5,
-      z = 10,
-      n = 30;
-
-  var width = 1280,
-      height = 720;
-
-  var canvas = d3.select("canvas")
-      .style("position", "absolute")
-      .style("top", 0)
-      .style("left", 0)
-      .style("width", "100%")
-      .style("height", "100%")
-      .attr("width", width)
-      .attr("height", height);
-
-  var color = d3.scale.linear()
-      .domain([0, 20, 30, 50])
-      .range(["yellow", "orange", "brown", "purple"])
-      .interpolate(d3.interpolateHcl);
-
-  var context = canvas.node().getContext("2d");
-
-  context.lineWidth = .2;
-  context.fillStyle = "rgba(0,0,0,.03)";
-
-  d3.timer(function() {
-    context.save();
-    context.globalCompositeOperation = "lighter";
-    context.translate(width / 2, height / 2);
-    context.scale(12, 14);
-    context.rotate(30);
-    for (var i = 0; i < n; ++i) {
-      context.strokeStyle = color(z);
-      context.beginPath();
-      context.moveTo(x, y);
-      x += δτ * σ * (y - x);
-      y += δτ * (x * (ρ - z) - y);
-      z += δτ * (x * y - β * z);
-      context.lineTo(x, y);
-      context.stroke();
-    }
-    context.restore();
-    return !lorenzInterval;
-  });
-
-  lorenzInterval = setInterval(function() {
-    context.fillRect(0, 0, width, height);
-  }, 100);
-}
-
-function stopLorenz() {
-  lorenzInterval = clearInterval(lorenzInterval);
-}
 
 </script>
