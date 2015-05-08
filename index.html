@@ -42,49 +42,9 @@ a:hover {
   <p stype="font-size:80%;"><b class="orange">Team .XLS</b><br>Yijun Xiao<br>Wenying Liu<br>Fangyun Sun</p>
 </section>
 
-<section>
+<section id="tip-pct">
   <script>
-    var width = 960,
-    height = 500,
-    radius = Math.min(width, height) / 2;
-
-    var color = d3.scale.category20();
-    var arc = d3.svg.arc()
-    .outerRadius(radius - 10)
-    .innerRadius(radius - 70);
-
-    var pie = d3.layout.pie()
-    .sort(null)
-    .value(function(d) { return d.pct; });
-
-    var svg = d3.select("body").append("svg")
-    .attr("width", width)
-    .attr("height", height)
-    .append("g")
-    .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
-
-    d3.csv("tip_dist.csv", function(error, data) {
-
-    data.forEach(function(d) {
-    d.pct = +d.pct;
-    });
-
-    var g = svg.selectAll(".arc")
-    .data(pie(data))
-    .enter().append("g")
-    .attr("class", "arc");
-
-    g.append("path")
-    .attr("d", arc)
-    .style("fill", function(d) { return color(d.data.tippct); });
-
-    g.append("text")
-    .attr("transform", function(d) { return "translate(" + arc.centroid(d) + ")"; })
-    .attr("dy", ".35em")
-    .style("text-anchor", "middle")
-    .text(function(d) { return d.data.tippct; });
-
-    });
+    
   </script>
 </section>
 
@@ -173,9 +133,9 @@ var mystack = stack()
 var section = d3.selectAll("section"),
     follow = d3.select("#follow"),
     followAnchor = d3.select("#follow-anchor"),
-    lorenz = d3.select("#lorenz"),
+    tipPct = d3.select("#tip-pct"),
     followIndex = section[0].indexOf(follow.node()),
-    lorenzIndex = section[0].indexOf(lorenz.node());
+    tipPctIndex = section[0].indexOf(tipPct.node());
 
 function refollow() {
   followAnchor.style("top", (followIndex + (1 - mystack.scrollRatio()) / 2 - d3.event.offset) * 100 + "%");
@@ -183,7 +143,7 @@ function refollow() {
 
 function activate(d, i) {
   if (i === followIndex) mystack.on("scroll.follow", refollow);
-  if (i === lorenzIndex) startLorenz();
+  if (i === tipPctIndex) startTipPct();
 }
 
 function deactivate(d, i) {
@@ -191,8 +151,60 @@ function deactivate(d, i) {
   if (i === lorenzIndex) stopLorenz();
 }
 
-var lorenzInterval;
+function startTipPct() {
+  var margin = {top: 20, right: 20, bottom: 20, left: 20};
+  width = 400 - margin.left - margin.right;
+  height = width - margin.top - margin.bottom;
+  radius = Math.min(width, height) / 2;
 
+var data = [ {tippct: "No tips", pct: 47.7},
+{tippct: "<10%", pct: 4.8},
+{tippct: "10~20%", pct:  22.5},
+{tippct: "20~30%", pct:  22.4},
+		 {tippct: ">30%", pct:  2.6} ];
+    
+    data.forEach(function(d) {
+    d.pct = +d.pct;
+    });
+    
+  var color = d3.scale.ordinal()
+  .range(["#FFF1E5", "#FFD7B2", "#FFBC7F", "#FFA24C", "#FF8719"]);
+
+  var arc = d3.svg.arc()
+  .outerRadius(radius - 20)
+  .innerRadius(radius - 70);
+
+  var pie = d3.layout.pie()
+  .sort(null)
+  .startAngle(1.1*Math.PI)
+  .endAngle(3.1*Math.PI)
+  .value(function(d) { return d.pct; });
+
+  var svg = d3.select("body").append("svg")
+  .attr("width", width)
+  .attr("height", height)
+  .append("g")
+.attr("transform", "translate(" + ((width/2)+margin.left) + "," + ((height/2)+margin.top) + ")");
+
+var g = svg.selectAll(".arc")
+.data(pie(data))
+.enter().append("g")
+.attr("class", "arc");
+
+g.append("path")
+.attr("d", arc)
+.style("fill", function(d) { return color(d.data.tippct); })
+.transition()
+.ease("linear").duration(1000)
+.attrTween('d', function(d) {
+var i = d3.interpolate({startAngle: 1.1*Math.PI, endAngle: 3.1*Math.PI}, d);
+return function(t) {
+return arc(i(t));
+}
+
+}
+
+var lorenzInterval;
 function startLorenz() {
   var δτ = 0.003,
       ρ = 28,
