@@ -150,11 +150,11 @@ function deactivate(d, i) {
 }
 
 function startTipDist() {
-var data = [ {name: "one", value: 10375},
-{name: "two", value:  7615},
-{name: "three", value:  832},
-{name: "four", value:  516},
-{name: "five", value:  491} ];
+var data = [ {name: "No tips", value: 47.7},
+{name: "<10%", value:  4.8},
+{name: "10-20%", value:  22.5},
+{name: "20-30%", value:  22.4},
+{name: ">30%", value:  2.6} ];
 
 var margin = {top: 20, right: 20, bottom: 20, left: 20};
 width = 400 - margin.left - margin.right;
@@ -170,11 +170,11 @@ var chart = d3.select("#dist-chart")
 var radius = Math.min(width, height) / 2;
 
 var color = d3.scale.ordinal()
-.range(["#3399FF", "#5DAEF8", "#86C3FA", "#ADD6FB", "#D6EBFD"]);
+.range(["#FFF1E5", "#FFD7B2", "#FFBC7F", "#FFA24C", "#FF8719"]);
 
 var arc = d3.svg.arc()
-.outerRadius(radius)
-.innerRadius(radius - 20);
+.outerRadius(radius - 20)
+.innerRadius(radius - 70);
 
 var pie = d3.layout.pie()
 .sort(null)
@@ -190,8 +190,8 @@ var g = chart.selectAll(".arc")
 g.append("path")
 .attr("fill", function(d, i) { return color(i); })
 .transition()
-.ease("exp")
-.duration(2000)
+.ease("linear")
+.duration(1000)
 .attrTween("d", tweenPie);
 
 function tweenPie(b) {
