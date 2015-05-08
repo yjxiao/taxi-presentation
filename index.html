@@ -44,6 +44,7 @@ a:hover {
 
 <section id="tip-pct">
   <canvas></canvas>
+  1
 </section>
 
 <section style="padding:5em 9em;">
@@ -198,8 +199,6 @@ function tweenPie(b) {
 var i = d3.interpolate({startAngle: 1.1*Math.PI, endAngle: 1.1*Math.PI}, b);
 return function(t) { return arc(i(t)); };
 }
-
 }
-
 
 </script>
