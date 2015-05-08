@@ -147,6 +147,7 @@ function activate(d, i) {
 
 function deactivate(d, i) {
   if (i === followIndex) mystack.on("scroll.follow", null);
+  if (i === tipDistIndex) stopCharts();
 }
 
 function startTipDist() {
@@ -200,4 +201,7 @@ return function(t) { return arc(i(t)); };
 }
 }
 
+function stopCharts() {
+  d3.select("svg").remove();
+}
 </script>
