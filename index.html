@@ -43,7 +43,9 @@ a:hover {
 </section>
 
 <section id="tip-dist"style="text-align:center;padding:.35em;">
+  <p style="font-size:80%">General Facts</p>
   <div id="dist-chart" style="font-size:50%;"></div>
+  <p><b class="orange">52%</b> passengers leave tips,<br>Most tip percentages fall in 10% ~ 30%.</p>
 </section>
 
 <section style="padding:5em 9em;">
@@ -197,7 +199,7 @@ g.append("path")
     g.append("text")
     .attr("transform", function(d) { return "translate(" + arc.centroid(d) + ")"; })
     .attr("dy", ".35em")
-    .attr("color", "#fff")
+    .attr("fill", "#fff")
     .attr("font-family", "\"PT Serif\", Baskerville, Georgia")
     .style("text-anchor", "middle")
     .text(function(d) { return d.data.name; });
