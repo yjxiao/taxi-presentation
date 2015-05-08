@@ -166,7 +166,6 @@ var chart = d3.select("body")
 .append("g")
 .attr("transform", "translate(" + ((width/2)+margin.left) + "," + ((height/2)+margin.top) + ")");
 
-
 var radius = Math.min(width, height) / 2;
 
 var color = d3.scale.ordinal()
@@ -251,7 +250,7 @@ g.append("path")
 var i = d3.interpolate({startAngle: 1.1*Math.PI, endAngle: 3.1*Math.PI}, d);
 return function(t) {
 return arc(i(t));
-    }}
+    }});
 }
 
 
