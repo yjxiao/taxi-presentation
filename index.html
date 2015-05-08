@@ -42,8 +42,8 @@ a:hover {
   <p stype="font-size:80%;"><b class="orange">Team .XLS</b><br>Yijun Xiao<br>Wenying Liu<br>Fangyun Sun</p>
 </section>
 
-<section id="tip-dist"style="text-align:center;padding:.35em;font-size:1000%;">
-  <div id="dist-chart"></div>
+<section id="tip-dist"style="text-align:center;padding:.35em;">
+  <div id="dist-chart" style="font-size:50%;"></div>
 </section>
 
 <section style="padding:5em 9em;">
@@ -197,7 +197,7 @@ g.append("path")
     g.append("text")
     .attr("transform", function(d) { return "translate(" + arc.centroid(d) + ")"; })
     .attr("dy", ".35em")
-    .attr("fill", "#fff")
+    .attr("")
     .style("text-anchor", "middle")
     .text(function(d) { return d.data.name; });
     
