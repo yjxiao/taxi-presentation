@@ -170,7 +170,7 @@ var chart = d3.select("#dist-chart")
 var radius = Math.min(width, height) / 2;
 
 var color = d3.scale.ordinal()
-.range(["#FFF1E5", "#FFD7B2", "#FFBC7F", "#FFA24C", "#FF8719"]);
+.range(["#FFC999", "#FFBC7F", "#FFA24C", "#FF9433", "#FF8719"]);
 
 var arc = d3.svg.arc()
 .outerRadius(radius - 20)
@@ -194,6 +194,13 @@ g.append("path")
 .duration(1000)
 .attrTween("d", tweenPie);
 
+    g.append("text")
+    .attr("transform", function(d) { return "translate(" + arc.centroid(d) + ")"; })
+    .attr("dy", ".35em")
+    .attr("fill", "#fff")
+    .style("text-anchor", "middle")
+    .text(function(d) { return d.data.name; });
+    
 function tweenPie(b) {
 var i = d3.interpolate({startAngle: 1.1*Math.PI, endAngle: 1.1*Math.PI}, b);
 return function(t) { return arc(i(t)); };
