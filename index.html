@@ -31,15 +31,15 @@ stroke: #fff;
 stroke-linejoin: round;
 }
 
-.q0-9 { fill:rgb(247,251,255); }
-.q1-9 { fill:rgb(222,235,247); }
-.q2-9 { fill:rgb(198,219,239); }
-.q3-9 { fill:rgb(158,202,225); }
-.q4-9 { fill:rgb(107,174,214); }
-.q5-9 { fill:rgb(66,146,198); }
-.q6-9 { fill:rgb(33,113,181); }
-.q7-9 { fill:rgb(8,81,156); }
-.q8-9 { fill:rgb(8,48,107); }
+.q0-9 { fill:#fff1e5; }
+.q1-9 { fill:#ffe4cc; }
+.q2-9 { fill:#ffd7b2; }
+.q3-9 { fill:#ffc999; }
+.q4-9 { fill:#ffbc7f; }
+.q5-9 { fill:#ffaf66; }
+.q6-9 { fill:#ffa24c; }
+.q7-9 { fill:#ff9433; }
+.q8-9 { fill:#ff8719; }
 
 </style>
 
@@ -69,7 +69,7 @@ stroke-linejoin: round;
 </section>
 
 <section id="tip-loc" style="text-align:center;padding:.35em;">
-  <p style="font-size:80%">General Facts</p>
+  <p style="font-size:80%">Tip Percentage by Pickup Location</p>
   <div id="loc-chart" style="font-size:50%;"></div>
   <p><b style="font-size:120%" class="orange">52</b>% passengers leave tips,<br>Most tip percentages fall in <b class="orange">10</b>% ~ <b class="orange">30</b>%.</p>
 </section>
@@ -229,8 +229,8 @@ stroke-linejoin: round;
     
     function startTipLoc() {
     
-    var width  = 1000;
-    var height = 1000;
+    var width  = 400;
+    var height = 400;
 
     var rateById = {};
 
