@@ -67,7 +67,12 @@ stroke-linejoin: round;
 </section>
 
 <section id="outline" style="text-align:center;padding-top:5em">
-  <p id="outlinetext"></p>
+  <p><b id="text1"></b>
+    <br><b id="text2"></b>
+    <br><b id="text3"></b>
+    <br><b id="text4"></b>
+    <br><b id="text5"></b>    
+  </p>
 </section>
 
 <section id="tip-loc" style="text-align:center;padding:.35em;">
@@ -156,7 +161,7 @@ stroke-linejoin: round;
   tipLocIndex = section[0].indexOf(tipLoc.node()),
   tipDistIndex = section[0].indexOf(tipDist.node());
 
-  var texts = ["Payment Type\nPickup/Dropoff Location\nWeather\nTravel Distance\nNumber of Passengers",];
+  var texts = ["Payment Type", "Pickup/Dropoff Location", "Weather", "Travel Distance", "Number of Passengers",];
   
   function refollow() {
   followAnchor.style("top", (followIndex + (1 - mystack.scrollRatio()) / 2 - d3.event.offset) * 100 + "%");
@@ -167,7 +172,7 @@ stroke-linejoin: round;
   if (i === tipDistIndex) startTipDist();
   if (i === tipLocIndex) startTipLoc();
   if (i === anormalyIndex) start7200("#digit1", 1000, 7200, 720);
-  if (i === outlineIndex) startTyping("#outlinetext", texts[0])
+  if (i === outlineIndex) startTyping(["#text1", "#text2", "#text3", "#text4", "#text5"], texts)
   }
   
   function deactivate(d, i) {
@@ -176,10 +181,14 @@ stroke-linejoin: round;
   if (i === tipLocIndex) stopCharts();
   }
 
-  function startTyping(id, data) {
-  
+  function startTyping(ids, data) {
+
+  var delay = 0;
+  ids.forEach(function(id, index, array) {
+  var duration = data[index].length * 100;
   d3.select(id).transition()
-  .duration(5000)
+  .delay(delay)
+  .duration(duration)
   .ease("linear")
   .tween("text", function () {
   var newText = data;
@@ -189,7 +198,8 @@ stroke-linejoin: round;
   Math.round( t * textLength) );
   };
   });
-  
+  delay = delay + duration;
+  })
   }
   
   function start7200(id, start_val, end_val, duration) {
