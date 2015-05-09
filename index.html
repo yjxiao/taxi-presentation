@@ -68,13 +68,17 @@ stroke-linejoin: round;
 
 <section id="outline" style="text-align:center;padding-top:5em">
   <p><b id="text1"></b>
-    <br><b id="text2"></b>
-    <br><b id="text3"></b>
-    <br><b id="text4"></b>
-    <br><b id="text5"></b>    
-  </p>
+  <p><b id="text2"></b>
+  <p><b id="text3"></b>
+  <p><b id="text4"></b>
+  <p><b id="text5"></b>    
 </section>
 
+<section>
+  <p style="font-size:80%">Payment Type</p>
+  
+</section>
+  
 <section id="tip-loc" style="text-align:center;padding:.35em;">
   <p style="font-size:80%">Pickup Location</p>  
   <div style="float:left;padding-left:2em;padding-top:2em;text-align:left">
@@ -191,7 +195,7 @@ stroke-linejoin: round;
   
   function startTyping(ids, data) {
 
-  var delay = 0;
+  var delay = 700;
   ids.forEach(function(id, index, array) {
   var duration = data[index].length * 20;
   d3.select(id).transition()
