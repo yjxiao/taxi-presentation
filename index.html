@@ -183,7 +183,7 @@ stroke-linejoin: round;
   if (i === outlineIndex) clearContents(outlineids);
   }
 
-  function clearContent(ids) {
+  function clearContents(ids) {
   ids.forEach(function(id, index, array) {
   d3.select(id).text("");
   });
