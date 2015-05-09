@@ -197,7 +197,7 @@ stroke-linejoin: round;
   d3.select(id).transition()
   .delay(delay)
   .duration(duration)
-  .ease("linear")
+  .ease()
   .tween("text", function () {
   var newText = data[index];
   var textLength = newText.length;
@@ -206,7 +206,7 @@ stroke-linejoin: round;
   Math.round( t * textLength) );
   };
   });
-  delay = delay + duration + 200;
+  delay = delay + duration + 300;
   });
   }
   
