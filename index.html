@@ -56,7 +56,7 @@ stroke-linejoin: round;
 </section>
 
 <section id="anormaly" style="padding:5em 9em;">
-  <p>Tip percentage <b id="7200" style="font-size:120%" class="orange">7200</b>%</p>
+  <p>Tip percentage <b id="digit1" style="font-size:120%" class="orange"></b>%</p>
   <p class="grey">What is going on?</p>
 </section>
 
@@ -181,7 +181,7 @@ stroke-linejoin: round;
   end_val = 7200,
   duration = 500;
 
-  d3.select('#7200')
+  d3.select('#digit1')
   .text(start_val)
   .transition()
   .duration(duration)
