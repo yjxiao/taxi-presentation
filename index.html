@@ -167,7 +167,7 @@ stroke-linejoin: round;
   if (i === followIndex) mystack.on("scroll.follow", refollow);
   if (i === tipDistIndex) startTipDist();
   if (i === tipLocIndex) startTipLoc();
-  if (i === anormalyIndex) start7200();
+  if (i === anormalyIndex) start7200("#digit1");
   }
   
   function deactivate(d, i) {
@@ -176,12 +176,12 @@ stroke-linejoin: round;
   if (i === tipLocIndex) stopCharts();
   }
 
-  function start7200() {
+  function start7200(id) {
   var start_val = 1000,
   end_val = 7200,
-  duration = 500;
+  duration = 720;
 
-  d3.select('#digit1')
+  d3.select(id)
   .text(start_val)
   .transition()
   .duration(duration)
