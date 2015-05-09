@@ -193,7 +193,7 @@ stroke-linejoin: round;
 
   var delay = 0;
   ids.forEach(function(id, index, array) {
-  var duration = data[index].length * 20;
+  var duration = data[index].length * 15;
   d3.select(id).transition()
   .delay(delay)
   .duration(duration)
@@ -206,7 +206,7 @@ stroke-linejoin: round;
   Math.round( t * textLength) );
   };
   });
-  delay = delay + duration + 300;
+  delay = delay + duration + 700;
   });
   }
   
