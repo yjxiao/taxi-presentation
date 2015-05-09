@@ -171,7 +171,8 @@ var chart = d3.select("#dist-chart")
 
 var radius = Math.min(width, height) / 2;
 
-var color = d3.scale.category20();
+    var color = d3.scale.ordinal()
+    .range(["#FFF1E5", "#FFD7B2", "#FFBC7F", "#FF9433", "#FF8719"]);
 
 var arc = d3.svg.arc()
 .outerRadius(radius - 20)
