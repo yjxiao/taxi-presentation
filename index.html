@@ -24,15 +24,22 @@ section {
   color: orange;
 }
 
-a:link,
-a:visited {
-  color: orange;
-  text-decoration: none;
+
+.counties {
+fill: none;
+stroke: #fff;
+stroke-linejoin: round;
 }
 
-a:hover {
-  text-decoration: underline;
-}
+.q0-9 { fill:rgb(247,251,255); }
+.q1-9 { fill:rgb(222,235,247); }
+.q2-9 { fill:rgb(198,219,239); }
+.q3-9 { fill:rgb(158,202,225); }
+.q4-9 { fill:rgb(107,174,214); }
+.q5-9 { fill:rgb(66,146,198); }
+.q6-9 { fill:rgb(33,113,181); }
+.q7-9 { fill:rgb(8,81,156); }
+.q8-9 { fill:rgb(8,48,107); }
 
 </style>
 
@@ -61,8 +68,10 @@ a:hover {
   <p>You can even grab the scroll bar!
 </section>
 
-<section style="text-align:center;padding:.35em;font-size:1000%;">
-  9
+<section id="tip-loc" style="text-align:center;padding:.35em;">
+  <p style="font-size:80%">General Facts</p>
+  <div id="loc-chart" style="font-size:50%;"></div>
+  <p><b style="font-size:120%" class="orange">52</b>% passengers leave tips,<br>Most tip percentages fall in <b class="orange">10</b>% ~ <b class="orange">30</b>%.</p>
 </section>
 
 <section style="text-align:center;padding:.35em;font-size:1000%;">
@@ -126,75 +135,79 @@ a:hover {
 <script src="stack.v1.min.js"></script>
 <script>
 
-var mystack = stack()
-    .on("activate", activate)
-    .on("deactivate", deactivate);
+  var mystack = stack()
+  .on("activate", activate)
+  .on("deactivate", deactivate);
 
-var section = d3.selectAll("section"),
-    follow = d3.select("#follow"),
-    followAnchor = d3.select("#follow-anchor"),
-    tipDist = d3.select("#tip-dist"),
-    followIndex = section[0].indexOf(follow.node()),
-    tipDistIndex = section[0].indexOf(tipDist.node());
+  var section = d3.selectAll("section"),
+  follow = d3.select("#follow"),
+  followAnchor = d3.select("#follow-anchor"),
+  tipDist = d3.select("#tip-dist"),
+  tipLoc = d3.select("#tip-loc"),
+  followIndex = section[0].indexOf(follow.node()),
+  tipLocIndex = section[0].indexOf(tipLoc.node()),
+  tipDistIndex = section[0].indexOf(tipDist.node());
 
-function refollow() {
+  function refollow() {
   followAnchor.style("top", (followIndex + (1 - mystack.scrollRatio()) / 2 - d3.event.offset) * 100 + "%");
-}
+  }
 
-function activate(d, i) {
+  function activate(d, i) {
   if (i === followIndex) mystack.on("scroll.follow", refollow);
   if (i === tipDistIndex) startTipDist();
-}
-
-function deactivate(d, i) {
+  if (i === tipLocIndex) startTipLoc();
+  }
+  
+  function deactivate(d, i) {
   if (i === followIndex) mystack.on("scroll.follow", null);
   if (i === tipDistIndex) stopCharts();
-}
+  if (i === tipLocIndex) stopCharts();  
+  }
 
-function startTipDist() {
-var data = [ {name: "No tips", value: 47.7},
-{name: "<10%", value:  4.8},
-{name: "10-20%", value:  22.5},
-{name: "20-30%", value:  22.4},
-{name: ">30%", value:  2.6} ];
+  function startTipDist() {
+  var data = [ {name: "No tips", value: 47.7},
+  {name: "<10%", value:  4.8},
+	       {name: "10-20%", value:  22.5},
+			      {name: "20-30%", value:  22.4},
+					     {name: ">30%", value:  2.6} ];
 
-var margin = {top: 20, right: 20, bottom: 20, left: 20};
-width = 400 - margin.left - margin.right;
-height = width - margin.top - margin.bottom;
+    var margin = {top: 20, right: 20, bottom: 20, left: 20};
+    width = 400 - margin.left - margin.right;
+    height = width - margin.top - margin.bottom;
 
-var chart = d3.select("#dist-chart")
-.append('svg')
-.attr("width", width + margin.left + margin.right)
-.attr("height", height + margin.top + margin.bottom)
-.append("g")
-.attr("transform", "translate(" + ((width/2)+margin.left) + "," + ((height/2)+margin.top) + ")");
+    var chart = d3.select("#dist-chart")
+    .append('svg')
+    .attr("width", width + margin.left + margin.right)
+    .attr("height", height + margin.top + margin.bottom)
+    .append("g")
+    .attr("transform", "translate(" + ((width/2)+margin.left) + "," + ((height/2)+margin.top) + ")");
 
-var radius = Math.min(width, height) / 2;
+    var radius = Math.min(width, height) / 2;
 
     var color = d3.scale.ordinal()
     .range(["#FFF1E5", "#FFD7B2", "#FFBC7F", "#FFA24C", "#FF8719"]);
 
-var arc = d3.svg.arc()
-.outerRadius(radius - 20)
-.innerRadius(radius - 90);
+    var arc = d3.svg.arc()
+    .outerRadius(radius - 20)
+    .innerRadius(radius - 90);
 
-var pie = d3.layout.pie()
-.sort(null)
-.startAngle(1.1*Math.PI)
-.endAngle(3.1*Math.PI)
-.value(function(d) { return d.value; });
+    var pie = d3.layout.pie()
+    .sort(null)
+    .startAngle(1.1*Math.PI)
+    .endAngle(3.1*Math.PI)
+    .value(function(d) { return d.value; });
 
-var g = chart.selectAll(".arc")
-.data(pie(data))
-.enter().append("g")
-.attr("class", "arc");
+    var g = chart.selectAll(".arc")
+    .data(pie(data))
+    .enter().append("g")
+    .attr("class", "arc");
 
-g.append("path")
-.attr("fill", function(d, i) { return color(i); })
-.transition()
-.ease("linear")
-.duration(1000)
-.attrTween("d", tweenPie);
+    g.append("path")
+    .attr("fill", function(d, i) { return color(i); })
+    .transition()
+    .ease("linear")
+    .duration(1000)
+    .attrTween("d", tweenPie);
 
     g.append("text")
     .attr("transform", function(d) { return "translate(" + arc.centroid(d) + ")"; })
@@ -204,13 +217,62 @@ g.append("path")
     .style("text-anchor", "middle")
     .text(function(d) { return d.data.name; });
     
-function tweenPie(b) {
-var i = d3.interpolate({startAngle: 1.1*Math.PI, endAngle: 1.1*Math.PI}, b);
-return function(t) { return arc(i(t)); };
-}
-}
+    function tweenPie(b) {
+    var i = d3.interpolate({startAngle: 1.1*Math.PI, endAngle: 1.1*Math.PI}, b);
+    return function(t) { return arc(i(t)); };
+    }
+    }
 
-function stopCharts() {
-  d3.select("svg").remove();
-}
+    function stopCharts() {
+    d3.select("svg").remove();
+    }
+    
+    function startTipLoc() {
+    
+    var width  = 1000;
+    var height = 1000;
+
+    var rateById = {};
+
+    var svg = d3.select("#loc-chart").append("svg")
+    .attr("width", width)
+    .attr("height", height)
+    .append("g")
+    .attr("transform", "translate(0,0)");
+
+    var projection = d3.geo.mercator()
+    .center([-73, 40])
+    .scale(80000)
+    .translate([1.7*width, 1.7*height]);
+
+    var path = d3.geo.path()
+    .projection(projection);
+
+    var quantize = d3.scale.quantize()
+    .domain([0, 0.15])
+    .range(d3.range(9).map(function(i) { return "q" + i + "-9"; }));
+
+    d3.csv("result1.csv", function(error, counties) {
+    counties.forEach(function(d) {
+    rateById[d.NAME] = +d.rate;
+    });
+    });
+
+    d3.json("nyc1.json", function(error, root) {
+
+    if (error)
+    return console.error(error);
+    console.log(root.features);
+
+    svg.selectAll("path").data(root.features)
+    .enter()
+    .append("path")
+    .attr("stroke","#000")
+    .attr("stroke-width",1)
+    .attr("d", path )
+    .attr("class",function(root){return quantize(rateById[root.properties.NAME])})
+
+
+    });
+    }
 </script>
