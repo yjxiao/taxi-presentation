@@ -161,7 +161,8 @@ stroke-linejoin: round;
   tipLocIndex = section[0].indexOf(tipLoc.node()),
   tipDistIndex = section[0].indexOf(tipDist.node());
 
-  var texts = ["Payment Type", "Pickup/Dropoff Location", "Weather", "Travel Distance", "Number of Passengers",];
+  var texts = ["Payment Type", "Pickup/Dropoff Location", "Weather", "Travel Distance", "Number of Passengers",],
+  outlineids = ["#text1", "#text2", "#text3", "#text4", "#text5"];
   
   function refollow() {
   followAnchor.style("top", (followIndex + (1 - mystack.scrollRatio()) / 2 - d3.event.offset) * 100 + "%");
@@ -172,15 +173,22 @@ stroke-linejoin: round;
   if (i === tipDistIndex) startTipDist();
   if (i === tipLocIndex) startTipLoc();
   if (i === anormalyIndex) start7200("#digit1", 1000, 7200, 720);
-  if (i === outlineIndex) startTyping(["#text1", "#text2", "#text3", "#text4", "#text5"], texts)
+  if (i === outlineIndex) startTyping(outlineids, texts);
   }
   
   function deactivate(d, i) {
   if (i === followIndex) mystack.on("scroll.follow", null);
   if (i === tipDistIndex) stopCharts();
   if (i === tipLocIndex) stopCharts();
+  if (i === outlineIndex) clearContents(outlineids);
   }
 
+  function clearContent(ids) {
+  ids.forEach(function(id, index, array) {
+  d3.select(id).text("");
+  });
+  }
+  
   function startTyping(ids, data) {
 
   var delay = 0;
@@ -199,7 +207,7 @@ stroke-linejoin: round;
   };
   });
   delay = delay + duration;
-  })
+  });
   }
   
   function start7200(id, start_val, end_val, duration) {
