@@ -71,7 +71,7 @@ stroke-linejoin: round;
 <section id="tip-loc" style="text-align:center;padding:.35em;">
   <p style="font-size:80%">Tip Percentage by Pickup Location</p>
   <div style="float:left;padding-left:2em;text-align:left">
-    <p><b style="font-size:120%" class="orange">52</b>% passengers leave tips,<br>Most tip percentages fall in <b class="orange">10</b>% ~ <b class="orange">30</b>%.</p>
+    <p>Among all neighborhoods,<br>passengers picked up at <b style="font-size:120%" class="orange">College Point</b><br>gave highest tips <b class="orange">19.13</b>%.</p>
   </div>
   <div id="loc-chart" style="font-size:50%;float:right;"></div>
 </section>
@@ -214,7 +214,7 @@ stroke-linejoin: round;
     g.append("text")
     .attr("transform", function(d) { return "translate(" + arc.centroid(d) + ")"; })
     .attr("dy", ".35em")
-    .attr("fill", "#2B2B2B")
+    .attr("fill", "#1F1F1F")
     .attr("font-family", "\"PT Serif\", Baskerville, Georgia")
     .style("text-anchor", "middle")
     .text(function(d) { return d.data.name; });
