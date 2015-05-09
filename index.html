@@ -229,8 +229,8 @@ stroke-linejoin: round;
     
     function startTipLoc() {
     
-    var width  = 400;
-    var height = 400;
+    var width  = 500;
+    var height = 500;
 
     var rateById = {};
 
@@ -242,7 +242,7 @@ stroke-linejoin: round;
 
     var projection = d3.geo.mercator()
     .center([-73, 40])
-    .scale(80000)
+    .scale(40000)
     .translate([1.7*width, 1.7*height]);
 
     var path = d3.geo.path()
