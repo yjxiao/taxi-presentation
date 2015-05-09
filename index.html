@@ -21,7 +21,7 @@ section {
 }
 
 .accent {
-  color: #89CFF0;
+  color: "red";
 }
 
 
@@ -393,7 +393,7 @@ fill: #fff;
     g.append("text")
     .attr("transform", function(d) { return "translate(" + arc.centroid(d) + ")"; })
     .attr("dy", ".35em")
-    .attr("fill", "#fff")
+    .attr("fill", "#1f1f1f")
     .attr("font-family", "\"PT Serif\", Baskerville, Georgia")
     .style("text-anchor", "middle")
     .text(function(d) { return d.data.name; });
