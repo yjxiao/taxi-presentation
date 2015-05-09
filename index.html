@@ -262,7 +262,8 @@ fill: #fff;
   };
   },
   function(error, data) {
-  var colorScale = d3.scale.quantize.domain([0.082, 0.127])
+  var colorScale = d3.scale.quantile()
+  .domain([0, buckets - 1, d3.max(data, function (d) { return d.value; })])
   .range(colors);
 
   var svg = d3.select("#day-hour-chart").append("svg")
