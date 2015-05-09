@@ -6,7 +6,7 @@
 @import url(http://fonts.googleapis.com/css?family=PT+Serif|PT+Serif:b|PT+Serif:i);
 
 section {
-  background: #301934;
+  background: #2B2B2B;
   color: #fff;
   padding: 2em;
   font-family: "PT Serif", Baskerville, Georgia;
@@ -212,7 +212,7 @@ stroke-linejoin: round;
     g.append("text")
     .attr("transform", function(d) { return "translate(" + arc.centroid(d) + ")"; })
     .attr("dy", ".35em")
-    .attr("fill", "#301934")
+    .attr("fill", "#2B2B2B")
     .attr("font-family", "\"PT Serif\", Baskerville, Georgia")
     .style("text-anchor", "middle")
     .text(function(d) { return d.data.name; });
@@ -241,8 +241,8 @@ stroke-linejoin: round;
     .attr("transform", "translate(0,0)");
 
     var projection = d3.geo.mercator()
-    .center([-73.9, 40.7])
-    .scale(40000)
+    .center([-73.0, 40.21])
+    .scale(42000)
     .translate([1.7*width, 1.7*height]);
 
     var path = d3.geo.path()
