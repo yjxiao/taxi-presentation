@@ -217,7 +217,7 @@ fill: #fff;
 
   function clearContents(ids) {
   ids.forEach(function(id, index, array) {
-  d3.select(id).remove("text");
+  d3.select(id).interrupt().text("");
   });
   }
 
