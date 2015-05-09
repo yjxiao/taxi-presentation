@@ -66,13 +66,8 @@ stroke-linejoin: round;
   <p class="grey">Bad data / missing values?</p>
 </section>
 
-<section style="text-align:center;padding-top:5em">
-  <p>Payment Type
-    <br>Pickup/Dropoff Location
-    <br>Weather
-    <br>Travel Distance
-    <br>Number of Passengers
-  </p>
+<section id="outline" style="text-align:center;padding-top:5em">
+  <p id="outlinetext"></p>
 </section>
 
 <section id="tip-loc" style="text-align:center;padding:.35em;">
@@ -154,11 +149,15 @@ stroke-linejoin: round;
   tipDist = d3.select("#tip-dist"),
   tipLoc = d3.select("#tip-loc"),
   anormaly = d3.select("#anormaly"),
+  outline = d3.select("#outline"),
   followIndex = section[0].indexOf(follow.node()),
   anormalyIndex = section[0].indexOf(anormaly.node()),
+  outlineIndex = section[0].indexOf(outline.node()),
   tipLocIndex = section[0].indexOf(tipLoc.node()),
   tipDistIndex = section[0].indexOf(tipDist.node());
 
+  var texts = ["Payment Type<br>Pickup/Dropoff Location<br>Weather<br>Travel Distance<br>Number of Passengers",];
+  
   function refollow() {
   followAnchor.style("top", (followIndex + (1 - mystack.scrollRatio()) / 2 - d3.event.offset) * 100 + "%");
   }
@@ -168,6 +167,7 @@ stroke-linejoin: round;
   if (i === tipDistIndex) startTipDist();
   if (i === tipLocIndex) startTipLoc();
   if (i === anormalyIndex) start7200("#digit1", 1000, 7200, 720);
+  if (i === outlineIndex) startTyping("#outlinetext", texts[0])
   }
   
   function deactivate(d, i) {
@@ -176,6 +176,22 @@ stroke-linejoin: round;
   if (i === tipLocIndex) stopCharts();
   }
 
+  function startTyping(id, data) {
+  
+  d3.select(id).transition()
+  .duration(5000)
+  .ease("linear")
+  .tween("text", function () {
+  var newText = data;
+  var textLength = newText.length;
+  return function (t) {
+  this.textContent = newText.substr(0,
+  Math.round( t * textLength) );
+  };
+  });
+  
+  }
+  
   function start7200(id, start_val, end_val, duration) {
 
   d3.select(id)
