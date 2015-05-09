@@ -191,7 +191,7 @@ stroke-linejoin: round;
   .duration(duration)
   .ease("linear")
   .tween("text", function () {
-  var newText = data;
+  var newText = data[index];
   var textLength = newText.length;
   return function (t) {
   this.textContent = newText.substr(0,
