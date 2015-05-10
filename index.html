@@ -267,10 +267,10 @@ display: none;
   
   function deactivate(d, i) {
   if (i === followIndex) mystack.on("scroll.follow", null);
-  if (i === tipDistIndex) stopCharts();
-  if (i === tipLocIndex) stopCharts();
-  if (i === dayHourIndex) stopCharts();
-  if (i === hourIndex) stopCharts();  
+  if (i === tipDistIndex) stopCharts("#dist-chart");
+  if (i === tipLocIndex) stopCharts("#loc-chart");
+  if (i === dayHourIndex) stopCharts("#day-hour-chart");
+  if (i === hourIndex) stopCharts("#hour-chart");  
   if (i === outlineIndex) clearContents(outlineids);
   }
 
@@ -540,8 +540,8 @@ display: none;
     }
     }
 
-    function stopCharts() {
-    d3.select("svg").remove();
+    function stopCharts(id) {
+    d3.select(id).select("svg").remove();
     }
     
     function startTipLoc() {
