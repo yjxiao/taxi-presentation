@@ -303,7 +303,7 @@ fill: #fff;
   .ticks(7)
   .tickFormat(function(d){return d + "%";});
 
-  var svg = d3.select("body").append("svg")
+  var svg = d3.select("#hour-chart").append("svg")
   .attr("width", width + margin.left + margin.right)
   .attr("height", height + margin.top + margin.bottom)
   .append("g")
