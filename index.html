@@ -60,6 +60,25 @@ text.axis-worktime {
 fill: #fff;
 }
 
+.barf{
+fill: rgb(33,113,181);
+}
+
+.axis {
+font: 10px sans-serif;
+}
+
+.axis path,
+.axis line {
+fill: none;
+stroke: #000;
+shape-rendering: crispEdges;
+}
+
+.x.axis path {
+display: none;
+}
+
 </style>
 
 <section style="text-align:center;padding-top:5em;">
@@ -344,7 +363,7 @@ fill: #fff;
   .attr("y",  height)
   .attr("height", 0)
   .transition()
-  .delay(function (d,i) { return i*150; })
+  .delay(function (d,i) { return i*100; })
   .attr("y", function(d) { return  y(d.percentage); })
   .attr("height", function(d) { return height -y(d.percentage); })
   .style("fill","#6BAED6");
