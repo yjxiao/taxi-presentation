@@ -386,7 +386,8 @@ display: none;
 
   groupText.append("textPath")
   .attr("xlink:href", function(d, i) { return "#group" + i; })
-  .text(function(d, i) { return cities[i].name; });
+  .text(function(d, i) { return cities[i].name; })
+  .style("fill", "#fff");
 
   // Remove the labels that don't fit. :(
   groupText.filter(function(d, i) { return groupPath[0][i].getTotalLength() / 2 - 16 < this.getComputedTextLength(); })
