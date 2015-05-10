@@ -209,11 +209,6 @@ display: none;
   1
 </section>
 
-<section id="follow" style="padding-top:5em;background:url(sky.jpg);background-size:cover;">
-  <p style="text-align:center;color:#000;font-size:200%;line-height:1.35em;">INSPIRATIONAL IMAGE<br>ACCOMPANIED BY<br>INSIGHTFUL COMMENTARY
-  <p id="follow-anchor" style="position:fixed;text-indent:-1.25em;">&larr; When this bar reaches the top,<br>the next slide will fade in.
-</section>
-
 <section style="text-align:center;padding-top:5em;">
   <p>If you resize the window,
     <br>slide content will scale up or down
@@ -225,13 +220,6 @@ display: none;
   <p style="position:absolute;z-index:1;padding-top:5em;left:0;width:100%;text-shadow:0 1px 0 #000;">Use <i>activate</i> and <i>deactivate</i> events
     <br>to enable complex animations
     <br>only when visible.
-</section>
-
-<section style="padding:5em 13em;">
-  <p>Stack is made by <a href="http://bost.ocks.org/mike/" rel="author">Mike Bostock</a>
-    <br>and is available on <a href="https://github.com/mbostock/stack">GitHub</a>
-    <br>under the <a href="https://github.com/mbostock/stack/blob/gh-pages/LICENSE">BSD license</a>.
-  <p><a style="color:#777;text-decoration:none;" href="https://github.com/mbostock/stack">View source to get started.</a>
 </section>
 
 <script src="d3.v3.min.js"></script>
@@ -329,79 +317,6 @@ display: none;
   }
 
   function startTravelDist() {
-  // Set the dimensions of the canvas / graph
-  var margin = {top: 30, right: 20, bottom: 30, left: 50},
-  width = 800 - margin.left - margin.right,
-  height = 330 - margin.top - margin.bottom;
-
-  // Set the ranges
-  var x = d3.scale.linear().range([0, width]);
-  var y = d3.scale.linear().range([height, 0]);
-
-  // Define the axes
-  var xAxis = d3.svg.axis().scale(x)
-  .orient("bottom");
-
-  var yAxis = d3.svg.axis().scale(y)
-  .orient("left")
-  .tickFormat(function(d){return d + "%";});
-
-
-  // Adds the svg canvas
-  var svg = d3.select("#travel-dist-chart")
-  .append("svg")
-  .attr("width", width + margin.left + margin.right)
-  .attr("height", height + margin.top + margin.bottom)
-  .append("g")
-  .attr("transform",
-  "translate(" + margin.left + "," + margin.top + ")");
-
-  // Get the data
-  d3.csv("Distance_tip.csv", function(error, data) {
-  data.forEach(function(d) {
-  d.trip_distance = +d.trip_distance;
-  d.tip_percentage = +d.tip_percentage;
-  });
-
-  // Scale the range of the data
-  x.domain(d3.extent(data, function(d) { return d.trip_distance; }));
-  y.domain([0, d3.max(data, function(d) { return d.tip_percentage; })]);
-
-  // Add the scatterplot
-  svg.selectAll("dot")
-  .data(data)
-  .enter().append("circle")
-  .attr("r", 2.0)
-  .style("opacity",0.25)
-  .style("fill","#6BAED6")
-  .attr("cx", function(d) { return x(d.trip_distance); })
-  .attr("cy", function(d) { return y(d.tip_percentage); });
-
-  // Add the X Axis
-  svg.append("g")
-  .attr("class", "x axis")
-  .attr("transform", "translate(0," + height + ")")
-  .call(xAxis)
-  .append("text")
-  .attr("class", "label")
-  .attr("x", width)
-  .attr("y", -6)
-  .style("text-anchor", "end")
-  .text("Travel Distance (miles)");
-  
-  // Add the Y Axis
-  svg.append("g")
-  .attr("class", "y axis")
-  .call(yAxis)
-  .append("text")
-  .attr("class", "label")
-  .attr("transform", "rotate(-90)")
-  .attr("y", 6)
-  .attr("dy", ".71em")
-  .style("text-anchor", "end")
-  .text("Tip Percentage (%)");
-
-  });
   }
   
   function startTempBar() {
