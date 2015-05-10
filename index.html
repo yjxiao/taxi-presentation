@@ -97,6 +97,7 @@ stroke-width: .25px;
 #circle:hover path.fade {
 display: none;
 }
+
 </style>
 
 <section style="text-align:center;padding-top:5em;">
@@ -188,32 +189,14 @@ display: none;
   <div id="hour-chart" style="font-size:50%;padding-top:1em"></div>
 </section>
 
-<section style="text-align:center;padding:.35em;font-size:1000%;">
-  8
+<section id="prec" style="text-align:center;padding:.35em;">
+  <p style="font-size:80%">Weather - Precipitation</p>
+  <div id="prec-chart" style="font-size:50%;padding-top:1em"></div>  
 </section>
 
-<section style="text-align:center;padding:.35em;font-size:1000%;">
-  7
-</section>
-
-<section style="text-align:center;padding:.35em;font-size:1000%;">
-  6
-</section>
-
-<section style="text-align:center;padding:.35em;font-size:1000%;">
-  5
-</section>
-
-<section style="text-align:center;padding:.35em;font-size:1000%;">
-  4
-</section>
-
-<section style="text-align:center;padding:.35em;font-size:1000%;">
-  3
-</section>
-
-<section style="text-align:center;padding:.35em;font-size:1000%;">
-  2
+<section id="temp" style="text-align:center;padding:.35em;">
+  <p style="font-size:80%">Weather - Temperature</p>
+  <div id="temp-chart" style="font-size:50%;padding-top:1em"></div>  
 </section>
 
 <section style="text-align:center;padding:.35em;font-size:1000%;">
@@ -261,6 +244,8 @@ display: none;
   locPair = d3.select("#loc-pair"),  
   dayHour = d3.select("#day-hour"),
   hour = d3.select("#hour"),
+  prec = d3.select("#prec"),
+  temp = d3.select("#temp"),
   anormaly = d3.select("#anormaly"),
   outline = d3.select("#outline"),
   followIndex = section[0].indexOf(follow.node()),
@@ -269,7 +254,9 @@ display: none;
   tipLocIndex = section[0].indexOf(tipLoc.node()),
   locPairIndex = section[0].indexOf(locPair.node()),
   tipDistIndex = section[0].indexOf(tipDist.node()),
-  hourIndex = section[0].indexOf(hour.node()),
+  precIndex = section[0].indexOf(prec.node()),
+  tempIndex = section[0].indexOf(temp.node()),  
+  hourIndex = section[0].indexOf(hour.node()),  
   dayHourIndex = section[0].indexOf(dayHour.node());
 
   var texts = ["Payment Type", "Pickup/Dropoff Location", "Time", "Weather", "Travel Distance",],
@@ -285,7 +272,9 @@ display: none;
   if (i === tipLocIndex) startTipLoc();
   if (i === locPairIndex) startLocPair();  
   if (i === dayHourIndex) startDayHourMap();
-  if (i === hourIndex) startHourBar();  
+  if (i === hourIndex) startHourBar();
+  if (i === precIndex) startPrecBar();
+  if (i === tempIndex) startTempBar();
   if (i === anormalyIndex) start7200("#digit1", 1000, 7200, 720);
   if (i === outlineIndex) startTyping(outlineids, texts);
   }
@@ -296,7 +285,9 @@ display: none;
   if (i === tipLocIndex) stopCharts("#loc-chart");
   if (i === locPairIndex) stopCharts("#loc-pair-chart");
   if (i === dayHourIndex) stopCharts("#day-hour-chart");
-  if (i === hourIndex) stopCharts("#hour-chart");  
+  if (i === hourIndex) stopCharts("#hour-chart");
+  if (i === precIndex) stopCharts("#prec-chart");
+  if (i === tempIndex) stopCharts("#temp-chart");  
   if (i === outlineIndex) clearContents(outlineids);
   }
 
@@ -327,6 +318,110 @@ display: none;
   });
   }
 
+  function startPrecBar() {
+  var margin = {top: 20, right: 20, bottom: 60, left: 40},
+  width = 960 - margin.left - margin.right,
+  height = 500 - margin.top - margin.bottom;
+
+  var x0 = d3.scale.ordinal()
+  .rangeRoundBands([0, width], .1);
+
+  var x1 = d3.scale.ordinal();
+
+  var y = d3.scale.linear()
+  .range([height, 0]);
+
+  var color = d3.scale.ordinal()
+  .range(["#C6DBEF",  "#4292C6"]);
+
+  var xAxis = d3.svg.axis()
+  .scale(x0)
+  .orient("bottom");
+
+  var yAxis = d3.svg.axis()
+  .scale(y)
+  .orient("left");
+
+  var svg = d3.select("#prec-chart").append("svg")
+  .attr("width", width + margin.left + margin.right)
+  .attr("height", height + margin.top + margin.bottom)
+  .append("g")
+  .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+  d3.csv("prec_tip.csv", function(error, data) {
+  var freqNames = d3.keys(data[0]).filter(function(key) { return key !== "tip"; });
+
+  data.forEach(function(d) {
+  d.freqs = freqNames.map(function(name) { return {name: name, value: +d[name]}; });
+  });
+
+  x0.domain(data.map(function(d) { return d.tip; }));
+  x1.domain(freqNames).rangeRoundBands([0, x0.rangeBand()]);
+  y.domain([0, d3.max(data, function(d) { return d3.max(d.freqs, function(d) { return d.value; }); })]);
+
+  svg.append("g")
+  .attr("class", "x axis")
+  .attr("transform", "translate(0," + height + ")")
+  .call(xAxis)
+  .selectAll("text")
+  .style("text-anchor", "end")
+  .attr("dx", "-.8em")
+  .attr("dy", "0.2em")
+  .attr("transform", function(d) {
+  return "rotate(-65)"
+  });
+
+  svg.append("g")
+  .attr("class", "y axis")
+  .call(yAxis)
+  .append("text")
+  .attr("transform", "rotate(-90)")
+  .attr("y", 3)
+  .attr("dy", ".71em")
+  .style("text-anchor", "end")
+  .text("frequency");
+  
+  var tip = svg.selectAll(".tip")
+  .data(data)
+  .enter().append("g")
+  .attr("class", "g")
+  .attr("transform", function(d) { return "translate(" + x0(d.tip) + ",0)"; });
+
+  tip.selectAll("rect")
+  .data(function(d) { return d.freqs; })
+  .enter().append("rect")
+  .attr("width", x1.rangeBand())
+  .attr("x", function(d) { return x1(d.name); })
+  .attr("y", function(d) { return y(d.value); })
+  .attr("height", 0)
+  .transition()
+  .delay(function (d,i) { return i*500; })
+  .attr("height", function(d) { return height - y(d.value); })
+  .style("fill", function(d) { return color(d.name); });
+
+  var legend = svg.selectAll(".legend")
+  .data(freqNames.slice().reverse())
+  .enter().append("g")
+  .attr("class", "legend")
+  .attr("transform", function(d, i) { return "translate(0," + i * 20 + ")"; });
+
+  legend.append("rect")
+  .attr("x", width - 18)
+  .attr("width", 18)
+  .attr("height", 18)
+  .style("fill", color);
+
+  legend.append("text")
+  .attr("x", width - 24)
+  .attr("y", 9)
+  .attr("dy", ".35em")
+  .style("text-anchor", "end")
+  .text(function(d) { return d; });
+
+  });
+  }
+
+  
   function startLocPair() {
   var width = 480,
   height = 480,
@@ -387,7 +482,7 @@ display: none;
   groupText.append("textPath")
   .attr("xlink:href", function(d, i) { return "#group" + i; })
   .text(function(d, i) { return cities[i].name; })
-  .style("fill", "#fff");
+  .style("fill", "#1f1f1f");
 
   // Remove the labels that don't fit. :(
   groupText.filter(function(d, i) { return groupPath[0][i].getTotalLength() / 2 - 16 < this.getComputedTextLength(); })
