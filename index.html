@@ -199,6 +199,11 @@ display: none;
   <div id="temp-chart" style="font-size:50%;padding-top:1em"></div>  
 </section>
 
+<section id="travel-dist" style="text-align:center;padding:.35em;">
+  <p style="font-size:80%">Travel Distance</p>
+  <div id="travel-dist-chart" style="font-size:50%;padding-top:1em"></div>  
+</section>
+
 <section style="text-align:center;padding:.35em;font-size:1000%;">
   1
 </section>
@@ -246,6 +251,7 @@ display: none;
   hour = d3.select("#hour"),
   prec = d3.select("#prec"),
   temp = d3.select("#temp"),
+  travelDist = d3.select("#travel-dist"),  
   anormaly = d3.select("#anormaly"),
   outline = d3.select("#outline"),
   followIndex = section[0].indexOf(follow.node()),
@@ -255,7 +261,8 @@ display: none;
   locPairIndex = section[0].indexOf(locPair.node()),
   tipDistIndex = section[0].indexOf(tipDist.node()),
   precIndex = section[0].indexOf(prec.node()),
-  tempIndex = section[0].indexOf(temp.node()),  
+  tempIndex = section[0].indexOf(temp.node()),
+  travelDistIndex = section[0].indexOf(travelDist.node()),  
   hourIndex = section[0].indexOf(hour.node()),  
   dayHourIndex = section[0].indexOf(dayHour.node());
 
@@ -275,6 +282,7 @@ display: none;
   if (i === hourIndex) startHourBar();
   if (i === precIndex) startPrecBar();
   if (i === tempIndex) startTempBar();
+  if (i === travelDistIndex) startTravelDist();  
   if (i === anormalyIndex) start7200("#digit1", 1000, 7200, 720);
   if (i === outlineIndex) startTyping(outlineids, texts);
   }
@@ -287,7 +295,8 @@ display: none;
   if (i === dayHourIndex) stopCharts("#day-hour-chart");
   if (i === hourIndex) stopCharts("#hour-chart");
   if (i === precIndex) stopCharts("#prec-chart");
-  if (i === tempIndex) stopCharts("#temp-chart");  
+  if (i === tempIndex) stopCharts("#temp-chart");
+  if (i === travelDistIndex) stopCharts("#travel-dist-chart");    
   if (i === outlineIndex) clearContents(outlineids);
   }
 
@@ -318,6 +327,82 @@ display: none;
   });
   }
 
+  function startTravelDist() {
+  // Set the dimensions of the canvas / graph
+  var margin = {top: 30, right: 20, bottom: 30, left: 50},
+  width = 800 - margin.left - margin.right,
+  height = 330 - margin.top - margin.bottom;
+
+  // Set the ranges
+  var x = d3.scale.linear().range([0, width]);
+  var y = d3.scale.linear().range([height, 0]);
+
+  // Define the axes
+  var xAxis = d3.svg.axis().scale(x)
+  .orient("bottom");
+
+  var yAxis = d3.svg.axis().scale(y)
+  .orient("left")
+  .tickFormat(function(d){return d + "%";});
+
+
+  // Adds the svg canvas
+  var svg = d3.select("#travel-dist-chart")
+  .append("svg")
+  .attr("width", width + margin.left + margin.right)
+  .attr("height", height + margin.top + margin.bottom)
+  .append("g")
+  .attr("transform",
+  "translate(" + margin.left + "," + margin.top + ")");
+
+  // Get the data
+  d3.csv("Distance_tip.csv", function(error, data) {
+  data.forEach(function(d) {
+  d.trip_distance = +d.trip_distance;
+  d.tip_percentage = +d.tip_percentage;
+  });
+
+  // Scale the range of the data
+  x.domain(d3.extent(data, function(d) { return d.trip_distance; }));
+  y.domain([0, d3.max(data, function(d) { return d.tip_percentage; })]);
+
+  // Add the scatterplot
+  svg.selectAll("dot")
+  .data(data)
+  .enter().append("circle")
+  .attr("r", 2.0)
+  .style("opacity",0.25)
+  .style("fill","#6BAED6")
+  .attr("cx", function(d) { return x(d.trip_distance); })
+  .attr("cy", function(d) { return y(d.tip_percentage); });
+
+  // Add the X Axis
+  svg.append("g")
+  .attr("class", "x axis")
+  .attr("transform", "translate(0," + height + ")")
+  .call(xAxis)
+  .append("text")
+  .attr("class", "label")
+  .attr("x", width)
+  .attr("y", -6)
+  .style("text-anchor", "end")
+  .text("Travel Distance");
+
+  // Add the Y Axis
+  svg.append("g")
+  .attr("class", "y axis")
+  .call(yAxis)
+  .append("text")
+  .attr("class", "label")
+  .attr("transform", "rotate(-90)")
+  .attr("y", 6)
+  .attr("dy", ".71em")
+  .style("text-anchor", "end")
+  .text("Tip Percentage(%)");
+
+  });
+  }
+  
   function startTempBar() {
   var margin = {top: 20, right: 20, bottom: 60, left: 40},
   width = 960 - margin.left - margin.right,
