@@ -657,7 +657,7 @@ display: none;
 
   // Add a mouseover title.
   group.append("title").text(function(d, i) {
-  return cities[i].name + ": " + d.value + " of origins";
+  return cities[i].name + ": " + Math.round(d.value) + " of origins";
   });
 
   // Add the group arc.
@@ -680,9 +680,9 @@ display: none;
   groupText.filter(function(d, i) { return groupPath[0][i].getTotalLength() / 2 - 16 < this.getComputedTextLength(); })
 				      .remove();
 
-										       // Add the chords.
-										       var chord = svg.selectAll(".chord")
-										       .data(layout.chords)
+  // Add the chords.
+  var chord = svg.selectAll(".chord")
+  .data(layout.chords)
 										       .enter().append("path")
 										       .attr("class", "chord")
 										       .style("fill", function(d) { return cities[d.source.index].color; })
@@ -690,18 +690,13 @@ display: none;
 
 										       // Add an elaborate mouseover title for each chord.
 										       chord.append("title").text(function(d) {
-										       return cities[d.source.index].name
-										       + " → " + cities[d.target.index].name
-										       + ": " + formatPercent(d.source.value)
-										       + "\n" + cities[d.target.index].name
-										       + " → " + cities[d.source.index].name
-										       + ": " + d.target.value;
-										       });
+										       return cities[d.source.index].name + " → " + cities[d.target.index].name + ": " + Math.round(d.source.value) + "\n" + cities[d.target.index].name + " → " + cities[d.source.index].name + ": " + d.target.value;
+});
 
-										       function mouseover(d, i) {
-										       chord.classed("fade", function(p) {
-										       return p.source.index != i
-										       && p.target.index != i;
+				function mouseover(d, i) {
+				chord.classed("fade", function(p) {
+				return p.source.index != i
+				&& p.target.index != i;
 										       });
 										       }
 										       });
