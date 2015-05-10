@@ -90,7 +90,7 @@ fill: #fff;
   <p><b id="text2"></b>
   <p><b id="text3"></b>
   <p><b id="text4"></b>
-  <p><b id="text5"></b>    
+  <p><b id="text5"></b>
 </section>
 
 <section style="text-align:center;padding:.35em;">
@@ -139,6 +139,11 @@ fill: #fff;
 <section id="day-hour" style="text-align:center;padding:.35em;">
   <p style="font-size:80%">Time</p>  
   <div id="day-hour-chart" style="font-size:50%;padding-top:1em"></div>
+</section>
+
+<section id="hour" style="text-align:center;padding:.35em;">
+  <p style="font-size:80%">Time</p>  
+  <div id="hour-chart" style="font-size:50%;padding-top:1em"></div>
 </section>
 
 <section style="text-align:center;padding:.35em;font-size:1000%;">
@@ -211,7 +216,8 @@ fill: #fff;
   followAnchor = d3.select("#follow-anchor"),
   tipDist = d3.select("#tip-dist"),
   tipLoc = d3.select("#tip-loc"),
-  dayHour = d3.select("#day-hour"),  
+  dayHour = d3.select("#day-hour"),
+  hour = d3.select("#hour"),
   anormaly = d3.select("#anormaly"),
   outline = d3.select("#outline"),
   followIndex = section[0].indexOf(follow.node()),
@@ -219,6 +225,7 @@ fill: #fff;
   outlineIndex = section[0].indexOf(outline.node()),
   tipLocIndex = section[0].indexOf(tipLoc.node()),
   tipDistIndex = section[0].indexOf(tipDist.node()),
+  hourIndex = section[0].indexOf(hour.node()),
   dayHourIndex = section[0].indexOf(dayHour.node());
 
   var texts = ["Payment Type", "Pickup/Dropoff Location", "Time", "Weather", "Travel Distance",],
@@ -233,6 +240,7 @@ fill: #fff;
   if (i === tipDistIndex) startTipDist();
   if (i === tipLocIndex) startTipLoc();
   if (i === dayHourIndex) startDayHourMap();
+  if (i === dayHourIndex) startHourBar();  
   if (i === anormalyIndex) start7200("#digit1", 1000, 7200, 720);
   if (i === outlineIndex) startTyping(outlineids, texts);
   }
@@ -242,6 +250,7 @@ fill: #fff;
   if (i === tipDistIndex) stopCharts();
   if (i === tipLocIndex) stopCharts();
   if (i === dayHourIndex) stopCharts();
+  if (i === hourIndex) stopCharts();  
   if (i === outlineIndex) clearContents(outlineids);
   }
 
@@ -272,6 +281,83 @@ fill: #fff;
   });
   }
 
+  function startHourChart() {
+  
+  var margin = {top: 20, right: 20, bottom: 60, left: 40},
+  width = 800 - margin.left - margin.right,
+  height = 350 - margin.top - margin.bottom;
+
+  var x = d3.scale.ordinal()
+  .rangeRoundBands([0, width], .25);
+
+  var y = d3.scale.linear()
+  .range([height, 0]);
+
+  var xAxis = d3.svg.axis()
+  .scale(x)
+  .orient("bottom");
+
+  var yAxis = d3.svg.axis()
+  .scale(y)
+  .orient("left")
+  .ticks(7)
+  .tickFormat(function(d){return d + "%";});
+
+  var svg = d3.select("body").append("svg")
+  .attr("width", width + margin.left + margin.right)
+  .attr("height", height + margin.top + margin.bottom)
+  .append("g")
+  .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+  d3.csv("alltime_tip_modified.csv", type, function(error, data) {
+  x.domain(data.map(function(d) { return d.time; }));
+  y.domain([5, d3.max(data, function(d) { return d.percentage; })]);
+
+  svg.append("g")
+  .attr("class", "x axis")
+  .attr("transform", "translate(0," + height + ")")
+  .call(xAxis)
+  .selectAll("text")
+  .style("text-anchor", "end")
+  .attr("dx", "-.8em")
+  .attr("dy", "0.2em")
+  .attr("transform", function(d) {
+  return "rotate(-65)"
+  });
+
+  svg.append("g")
+  .attr("class", "y axis")
+  .call(yAxis)
+  .append("text")
+  .attr("transform", "rotate(-90)")
+  .attr("y", 3)
+  .attr("dy", ".71em")
+  .style("text-anchor", "end")
+  .text("Tip Percentage");
+
+  svg.selectAll(".bar")
+  .data(data)
+  .enter().append("rect")
+  .attr("class", "bar")
+  .attr("x", function(d) { return x(d.time); })
+  .attr("width", x.rangeBand())
+  .attr("y",  height)
+  .attr("height", 0)
+  .transition()
+  .delay(function (d,i) { return i*150; })
+  .attr("y", function(d) { return  y(d.percentage); })
+  .attr("height", function(d) { return height -y(d.percentage); })
+  .style("fill","#6BAED6");
+
+  });
+
+  function type(d) {
+  d.percentage = +d.percentage;
+  return d;
+  }
+  
+  }
+  
   function startDayHourMap() {
   var margin = { top: 50, right: 0, bottom: 100, left: 30 },
   width = 960 - margin.left - margin.right,
