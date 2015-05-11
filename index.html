@@ -202,9 +202,7 @@ display: none;
 
 <section id="travel-dist" style="text-align:center;padding:.35em;">
   <p style="font-size:80%">Travel Distance</p>
-  <div style="padding-top:2em;float:left"><p>tip pct<br>1%-40%</p></div>
   <div id="travel-dist-chart" style="font-size:50%;padding-top:1em;float:left"></div>
-  <p>distance 0-49 mile</p>
 </section>
 
 <section style="text-align:center;padding-top:1em;font-size:300%">
@@ -335,6 +333,20 @@ display: none;
   .append("g")
   .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
+  var timeLabels = svg.selectAll(".timeLabel")
+  .enter().append("text")
+  .text("distance (mile)")
+  .attr("x", 25 * gridSize)
+  .attr("y", 0)
+  .style("text-anchor", "middle")
+
+  var dayLabels = svg.selectAll(".dayLabel")
+  .enter().append("text")
+  .text("tip %")
+  .attr("x", 0)
+  .attr("y", 20 * gridSize)
+  .style("text-anchor", "end")
+
   var heatMap = svg.selectAll(".hour")
   .data(data)
   .enter().append("rect")
@@ -350,6 +362,7 @@ display: none;
   heatMap.transition().duration(1000)
   .style("fill", function(d) { return colorScale(d.value); });
   heatMap.append("title").text(function(d) { return d.value; });
+
   });
   }
   
