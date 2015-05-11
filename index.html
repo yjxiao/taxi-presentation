@@ -202,7 +202,8 @@ display: none;
 
 <section id="travel-dist" style="text-align:center;padding:.35em;">
   <p style="font-size:80%">Travel Distance</p>
-  <div id="travel-dist-chart" style="font-size:50%;padding-top:1em;float:left"></div>
+  <div id="travel-dist-chart" style="font-size:50%;padding-top:1em;padding-left:1em;float:left"></div>
+  <div style="padding-top:3em;float:left"><p>X: trip distance in miles<br>Y: tip percentage</p></div>
 </section>
 
 <section style="text-align:center;padding-top:1em;font-size:300%">
@@ -312,11 +313,6 @@ display: none;
   buckets = 8,
   colors = ["#deebf7","#c6dbef","#9ecae1","#6baed6","#4292c6","#2171b5","#08519c","#08306B"];
   
-  var x = d3.scale.linear().range([0, 50]),
-  y = d3.scale.linear().range([0, 40]),
-  xAxis = d3.svg.axis().scale(x).ticks(5).tickSubdivide(true),
-  yAxis = d3.svg.axis().scale(y).ticks(4);
-  
   d3.csv("tippct_dist.csv",
   function(d) {
   return {
@@ -336,17 +332,6 @@ display: none;
   .append("g")
   .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-  svg.append("g")
-  .attr("class", "x axis")
-  .attr("transform", "translate(0," + 40 + ")")
-  .call(xAxis);
-
-  // Add the y-axis.
-  svg.append("g")
-  .attr("class", "y axis")
-  .attr("transform", "translate(" + 50 + ",0)")
-  .call(yAxis);
-  
   var heatMap = svg.selectAll(".hour")
   .data(data)
   .enter().append("rect")
